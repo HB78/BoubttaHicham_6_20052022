@@ -1,3 +1,4 @@
+//ce fichier dbCongig.js sert à se connecter à la base de données avec mongoose
 const mongoose = require("mongoose");
 
 //pour se connecter à la base de données, mongoose fait le lien entre l'api et mongoDB
