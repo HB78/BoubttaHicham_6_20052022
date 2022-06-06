@@ -11,7 +11,7 @@ const bodyParser = require("body-parser");
 const mongoose = require('./models/dbConfig');
 
 //on importe les routes qu'on a codé dans le fichier user du dossier route
-const userRoutes = require("./routes/user");
+const userRoutes = require("./routes/users");
 
 //on donne par defaut le port 3000 si, il est occupé il recherchera un port libre
 let port = process.env.PORT || 3000;
