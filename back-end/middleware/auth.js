@@ -41,4 +41,4 @@ module.exports = (req, res, next) => {
             error: new Error('Requete invalide!')
           });
     }
-}
+};
