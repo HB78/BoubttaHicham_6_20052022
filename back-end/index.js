@@ -13,6 +13,9 @@ const mongoose = require('./models/dbConfig');
 //on importe les routes qu'on a codé dans le fichier user du dossier route
 const userRoutes = require("./routes/users");
 
+//on importe le middleware d'authentification
+const auth = require("./middleware/auth")
+
 //on donne par defaut le port 3000 si, il est occupé il recherchera un port libre
 let port = process.env.PORT || 3000;
 
@@ -24,10 +27,17 @@ app.listen(port, () => {
 
 /**********************/
 
+//gestion des erreurs cors
+app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+    next();
+})
 //le req et le res fonctionne avec le paquet body parser sa ressemble a la methode JSON.parse
 //cela permet d'interpreter du JSON
 app.use(bodyParser.json());
 
 //on utilise les routes users pour login et signup
-app.use("/node-api", userRoutes);
+app.post("/node-api", auth, userRoutes);
 

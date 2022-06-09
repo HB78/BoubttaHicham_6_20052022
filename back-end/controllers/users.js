@@ -47,7 +47,7 @@ exports.signup = (req, res, next) => {
                   userId : user._id,
                   token : jwt.sign(
                       {userId : user._id},
-                      'kaioken',
+                      'key',
                       {expiresIn: "24h"}
                   )
               })
