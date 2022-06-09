@@ -39,5 +39,6 @@ app.use((req, res, next) => {
 app.use(bodyParser.json());
 
 //on utilise les routes users pour login et signup
-app.post("/node-api", auth, userRoutes);
+app.use("/api/auth", userRoutes);
+
 

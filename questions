@@ -1,0 +1,4 @@
+verification des deux codes (cours et projet)
+connexion a l'api et mongodb / postman
+pourquoi remettre le post dans le fichier index.js alors qu'on la deja mis dans le dossier router ?
+j'ai un gros problème avec les uri

@@ -9,6 +9,7 @@ const userConnexion = require("../controllers/users");
 
 router.post("/signup", userConnexion.signup);
 router.post("/login", userConnexion.login);
+router.get("/", userConnexion.test)
 
 //on exporte tous les routers que l'on a coder ici
 module.exports = router;
