@@ -41,4 +41,6 @@ app.use(bodyParser.json());
 //on utilise les routes users pour login et signup
 app.use("/api/auth", userRoutes);
 
+//les autres routes ici
+
 
