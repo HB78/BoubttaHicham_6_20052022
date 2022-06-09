@@ -1,7 +1,7 @@
 // Après avoir envoyé ses infos (mdp et login) on va créer ici le token de l'utilisateur
 //le token sera créer à partir de ses infos envoyé
 //ensuite on lui enverra ce token pour qu'il se connecte à l'api 
-//le token va servir d'authentifiant, de passeport pour le user
+//le token va servir d'authentifiant, de passeport.
 
 //importations
 const jwt = require("jsonwebtoken");
