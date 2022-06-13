@@ -1,5 +1,10 @@
 // ici se sont les consignes qu'il y aura dans les requetes get et post des sign in et sign up 
 
+//on importe dotenv pour avoir les variables d'environnement
+const dotenv = require("dotenv");
+const result = dotenv.config();
+console.log("-->test sur la page user route", process.env.KEY)
+
 //ici on importe bcrypt
 const bcrypt = require("bcrypt");
 
@@ -47,19 +52,18 @@ exports.signup = (req, res, next) => {
               if(!valid) {
                 return res.status(401).json({error: "mot de passe incorrect"})
               }
+              console.log("connexion reussie")
+              console.log(req.body)
               res.status(200).json({
                   userId : user._id,
                   token : jwt.sign(
-                      {userId : user._id},
-                      'key',
-                      {expiresIn: "24h"}
+                      { userId : user._id },
+                      process.env.KEY,
+                      { expiresIn: "24h" }
                   )
               })
           })
           .catch(error => res.status(500).json({ error }))
      })
      .catch(error => res.status(500).json({ error }))
- }
- exports.test = (req, res, next) => {
-    res.json({ message: 'serveur démarrés 22 !' })
- }
+ };

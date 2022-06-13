@@ -10,12 +10,11 @@ const bodyParser = require("body-parser");
 //si on importe pas une paquet dans le fichier principal il ne fonctionnera pas
 const mongoose = require('./models/dbConfig');
 
+//accession au path du server (sa veut dire quoi ?)
+const path = require("path");
+
 //on importe les routes qu'on a codé dans le fichier user du dossier route
 const userRoutes = require("./routes/users");
-
-//on importe le middleware d'authentification
-const auth = require("./middleware/auth")
-
 //on donne par defaut le port 3000 si, il est occupé il recherchera un port libre
 let port = process.env.PORT || 3000;
 
@@ -33,7 +32,11 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
     next();
-})
+});
+
+//Ca veut dire quoi la gestion static ?
+app.use("/images", express.static(path.join(__dirname, 'images')));
+
 //le req et le res fonctionne avec le paquet body parser sa ressemble a la methode JSON.parse
 //cela permet d'interpreter du JSON
 app.use(bodyParser.json());
@@ -42,5 +45,3 @@ app.use(bodyParser.json());
 app.use("/api/auth", userRoutes);
 
 //les autres routes ici
-
-
