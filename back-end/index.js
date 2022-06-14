@@ -15,6 +15,10 @@ const path = require("path");
 
 //on importe les routes qu'on a codé dans le fichier user du dossier route
 const userRoutes = require("./routes/users");
+
+//on importe les routes qu'on a codé dans le fichier post du dossier route
+const saucesRoutes = require("./routes/posts");
+
 //on donne par defaut le port 3000 si, il est occupé il recherchera un port libre
 let port = process.env.PORT || 3000;
 
@@ -25,7 +29,6 @@ app.listen(port, () => {
 });
 
 /**********************/
-
 //gestion des erreurs cors
 app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
@@ -43,5 +46,8 @@ app.use(bodyParser.json());
 
 //on utilise les routes users pour login et signup
 app.use("/api/auth", userRoutes);
+
+//on utilise les routes pour faire un CRUD des sauces
+app.use("/api/sauces", saucesRoutes);
 
 //les autres routes ici

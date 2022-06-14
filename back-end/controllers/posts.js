@@ -24,7 +24,7 @@ exports.createSauce = (req, res, next) => {
     //à cause de req.file cad l'ajout de la photo et multer, req.body devient une string
     //demander la diff entre req.file et req.body
     //pourquoi on efface l'Id avec delete avant de commencer ?
-    const parseRequest = JSON.PARSE(req.body.sauce);
+    const parseRequest = JSON.parse(req.body.sauce);
     delete parseRequest._id;
     const Sauce = new sauce({
         ...parseRequest,
@@ -54,7 +54,40 @@ exports.deleteSauce = (req, res, next) => {
 };
 
 //modifier une sauce
-exports.modifySauce = (req, res, next) => {
+exports.updateSauce = (req, res, next) => {
+    //premier cas : la photo est modifiée par l'utilisateur
+    if(req.file) {
+        // on l'efface et on remet à jour le tout
+        //_id : req.params.id sélectionne l'objet à mettre à jour
+        //le contenu finira t'il dans {...req.body } ?
+        //dans {...req.body, _id : req.paramas.id} on ajoute l'id pour etre sur que l'id soi le meme
+        //req.file => sa veut dire si il y a un fichier dans la requete
+        //si l'utilisateur modifie la photo on va recevoir en form data donc il faur parser le tout
+        sauce.findOne({ _id: req.params.id })
+         .then(reqContain => {
+            console.log(reqContain)
+            //pk on le récupère dans la requete ?
+            const fileNameOfReq = reqContain.imageUrl.split('/images/')[1];
+            fs.unlink(`images/${fileNameOfReq}`, () => {
+                //on update tout en recréant une nouvelle sauce avec les nouveaux élements
+                const updateSauce = {
+                    ...JSON.parse(req.body.reqContain),
+                    imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+                }
+                sauce.updateOne({ _id: req.params.id }, { updateSauce, _id: req.params.id })
+                 .then(() => res.status(200).json({ message: "sauce mise à jour" }))
+                 .catch(error => res.status(400).json({ error }));
+            })
+         })
+         .catch(error => res.status(400).json({ error }))
+    }else {
+        //deuxième cas : la photo n'est pas concernée par les modifications
+        //on recoit cette fois des données sous format JSON
+        //A QUOI CORRESPOND ...req.body ??????
+        const infosChangedByUser = { ...req.body };
+        sauce.updateOne({ _id: req.params.id }, { ...infosChangedByUser, _id: req.params.id })
+         .then(() => res.status(200).json({ message: 'Sauce modifiée!' }))
+         .catch(error => res.status(400).json({ error }));
+    }
 };
-
 //req.params c'est pour trouver l'objet dans la base de donnée ?

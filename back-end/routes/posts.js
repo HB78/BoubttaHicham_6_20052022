@@ -10,9 +10,22 @@ const multer = require("../middleware/multer");
 //on importe le middleware d'authentification
 const auth = require("../middleware/auth");
 
-//route pour afficher une sauce 
-//route pour afficher toutes les sauces
-//routes pour créer une sauce
-//routes pour supprimer une sauce
-//route pour mettre à jour une sauce
+//importation des controllers pour le CRUD
+const crud = require("../controllers/posts");
 
+//route pour afficher une sauce
+router.get("/:id", crud.showOneSauce);
+
+//route pour afficher toutes les sauces
+router.get("/", crud.showAllSauce);
+
+//routes pour créer une sauce
+router.post("/", multer, crud.createSauce);
+
+//routes pour supprimer une sauce
+router.delete("/:id", crud.deleteSauce);
+
+//route pour mettre à jour une sauce
+router.put("/:id", multer, crud.updateSauce)
+//exportation des routers
+module.exports = router;
