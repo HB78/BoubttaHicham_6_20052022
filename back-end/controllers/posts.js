@@ -13,8 +13,9 @@ exports.showAllSauce = (req, res, next) => {
 
 //affichage d'une seul sauce
 exports.showOneSauce = (req, res, next) => {
+    console.log("requete params", req.params.id);
     //on compare l'_id du produit à celui du parametre de requete 
-    sauce.findOne({_id: req.params.id })
+    sauce.findOne({_id: req.params.id})
      .then(sauces => res.status(200).json(sauces))
      .catch(error => res.status(404).json({ error }))
 };
@@ -28,8 +29,9 @@ exports.createSauce = (req, res, next) => {
     delete parseRequest._id;
     const Sauce = new sauce({
         ...parseRequest,
-        imageUrl: `${req.protocole}://${req.get("host")}/images/${req.file.filename}`
+        imageUrl: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
     });
+    // console.log("saucee image url", Sauce.imageUrl); 
     Sauce.save()
      .then(() => res.status(201).json({message: "sauce enregistré"}))
      .catch(error => res.status(400).json({ error }))
@@ -91,3 +93,5 @@ exports.updateSauce = (req, res, next) => {
     }
 };
 //req.params c'est pour trouver l'objet dans la base de donnée ?
+
+//gestion des likes

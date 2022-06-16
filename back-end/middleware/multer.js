@@ -18,10 +18,13 @@ const storage = multer.diskStorage({
     //mise en place du nom unique pour chaque fichier
     filename: (req, file, callback) => {
         //on supprime les espaces dans le nom des fichiers
-        const name = file.originalname.split(" ").join("_");
+        const name = file.originalname.split(' ').join('_');
+        const originalName = name.split(".")[0];
+        console.log("--> ici originalname", file.originalname)
+        console.log("--> ici originalName", originalName)
         const extension = MIME_TYPES[file.mimetype];
         //le callback va créer le nom à partir du name de extension et de date.now
-        callback(null, name + "_" + Date.now() + extension);
+        callback(null, originalName + '_' + Date.now() + '.' + extension);
     }
 });
 // exportation de multer avec single on autorise l'upload d'une seule photo
