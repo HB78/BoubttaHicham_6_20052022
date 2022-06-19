@@ -12,34 +12,31 @@ console.log("-->test sur la page user auth", process.env.KEY)
 //exportation de la fonction du middleware
 module.exports = (req, res, next) => {
     try {
-        //on s'occupe du token ici qui se trouve dans le header autorization : voir bearer token
-          const allToken = req.headers.autorization;
-          console.log(req.body)
-          //problème : dans allToken il y a un tableau avec le token et bearer, on juste le token"
+        const BearerAndToken = req.headers.authorization;
+        const token = BearerAndToken.replace("Bearer ", "");
 
-          //avec les parenthèse du .split on coupe au niveau de l'espace
-          //dans les crochets on met l'index de ce qu'on veut récupérer dans le tableau
-          const token = req.headers.autorization.split(" ")[1];
+        //on s'occupe du token ici qui se trouve dans le header autorization : voir bearer token
+        //problème : dans allToken il y a un tableau avec le token et bearer, on juste le token"
+        
+        //avec les parenthèse du .split on coupe au niveau de l'espace
+        //dans les crochets on met l'index de ce qu'on veut récupérer dans le tableau
+        // allToke = "Bearer  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MmE0YjIyMjJiZTY4Zjg2NjczNWY5Y2IiLCJpYXQiOjE2NTU0MDQzOTEsImV"
 
         //on décode le token
-          const decodedToken = jwt.verify(token, process.env.KEY);
+        const decodedToken = jwt.verify(token, process.env.KEY);
 
-        //on récupère l'userId dans le token
-          const userIdDecodedToken = decodedToken.userId;
-        
-        //on récupère l'userId de la req cad celui de l'utilisateur
-          const userIdFront = req.body.userId;
-      
         //on compare les deux ID des users
-        if (req.body.userId && req.body.userId !== userIdDecodedToken) {
-          throw "l'identifiant utilisateur non valide";
+        if (!decodedToken) {
+          res.status(401).json("Vous n'etes pas autorisé à vous connécté")
+          throw "Mauvais jwt";
         } else {
+          //on récupère l'userId dans le token
+          req.body.userIdDecodedToken = decodedToken.userId;
           next();
         }
+
     } catch {
         //ici on récupère et on gère les erreurs du try
-        res.status(401).json({
-            error: new Error('Requete invalide!')
-          });
+        res.status(401).json('Requete invalide!');
     }
 };

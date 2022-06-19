@@ -14,10 +14,10 @@ const auth = require("../middleware/auth");
 const crud = require("../controllers/posts");
 
 //route pour afficher une sauce
-router.get("/:id", crud.showOneSauce);
+router.get("/:id", auth, crud.showOneSauce);
 
 //route pour afficher toutes les sauces
-router.get("/", crud.showAllSauce);
+router.get("/", auth, crud.showAllSauce);
 
 //routes pour créer une sauce
 router.post("/", multer, crud.createSauce);

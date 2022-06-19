@@ -39,9 +39,8 @@ exports.signup = (req, res, next) => {
  exports.login = (req, res, next) => {
      //findOne permet de trouver un seul utilisateur de la DB en comparant ladresse mail car elle est unique
      //on introduit dans la parenthèse l'objet de comparaison mongoose va donc chercher le mail entré par l'utilisateur
-     user.findOne({email: req.body.email})
-    //dans le then on vérifie si on a récupérer un user
-     .then(user => {
+     //dans le then on vérifie si on a récupérer un user
+     user.findOne({email: req.body.email}).then(user => {
          if(!user){
              return res.status(401).json({error: "utilisateur inexistant"})
          }
@@ -53,15 +52,14 @@ exports.signup = (req, res, next) => {
                 return res.status(401).json({error: "mot de passe incorrect"})
               }
               console.log("connexion reussie")
-              console.log(req.body)
-              res.status(200).json({
-                  userId : user._id,
-                  token : jwt.sign(
-                      { userId : user._id },
-                      process.env.KEY,
-                      { expiresIn: "24h" }
-                  )
-              })
+              console.log(req.body);
+              const token = jwt.sign({userId : user._id }, process.env.KEY, {expiresIn: "7d"});
+              console.log("Nouveau token de connction générer :>", token);
+              const objResponse = {
+                userId : user._id,
+                token : token,
+            }
+            res.status(200).json(objResponse);
           })
           .catch(error => res.status(500).json({ error }))
      })

@@ -22,12 +22,6 @@ const saucesRoutes = require("./routes/posts");
 //on donne par defaut le port 3000 si, il est occupé il recherchera un port libre
 let port = process.env.PORT || 3000;
 
-//on écoute le port pour voir si il fonctionne
-app.listen(port, () => {
-    console.log(`Le server a été activé au port ${port}`)
-    console.log("http://localhost:" + port)
-});
-
 /**********************/
 //gestion des erreurs cors
 app.use((req, res, next) => {
@@ -38,11 +32,14 @@ app.use((req, res, next) => {
 });
 
 //Ca veut dire quoi la gestion static ?
+// __dirname c://user/desktop/projet
+// path.join(__dirname, 'images') == __dirname + '/' + '/image';
 app.use("/images", express.static(path.join(__dirname, 'images')));
 
 //le req et le res fonctionne avec le paquet body parser sa ressemble a la methode JSON.parse
 //cela permet d'interpreter du JSON
 app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true })); // to support URL-encoded bodies
 
 //on utilise les routes users pour login et signup
 app.use("/api/auth", userRoutes);
@@ -50,4 +47,14 @@ app.use("/api/auth", userRoutes);
 //on utilise les routes pour faire un CRUD des sauces
 app.use("/api/sauces", saucesRoutes);
 
+app.get("/", (req, res) => {
+    res.status(200).send("API fonctionel route: /api/auth /api/sauces")
+})
+
 //les autres routes ici
+
+//on écoute le port pour lancer le serveur
+app.listen(port, () => {
+    console.log(`Le server a été activé au port ${port}`)
+    console.log("http://localhost:" + port)
+});

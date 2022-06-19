@@ -13,11 +13,15 @@ exports.showAllSauce = (req, res, next) => {
 
 //affichage d'une seul sauce
 exports.showOneSauce = (req, res, next) => {
-    console.log("requete params", req.params.id);
+    console.log("requete params show one sauce", req.params.id)
     //on compare l'_id du produit à celui du parametre de requete 
-    sauce.findOne({_id: req.params.id})
-     .then(sauces => res.status(200).json(sauces))
-     .catch(error => res.status(404).json({ error }))
+    sauce.findOne({ _id: req.params.id })
+     .then((response) => {
+        res.status(200).json(response);
+    })
+     .catch((error) => {
+        res.status(404).json({ error });
+    });
 };
 
 //créer une sauce
@@ -40,7 +44,7 @@ exports.createSauce = (req, res, next) => {
 //effacer une sauce
 exports.deleteSauce = (req, res, next) => {
     //on cherche la sauce selectionnée avec findOne
-  sauce.fincOne({_id: req.params.id})
+  sauce.findOne({_id: req.params.id})
     .then(thing => {
         //on récupère le nom de la photo grace a split[1]
         const filename = thing.imageUrl.split("/images/")[1];
