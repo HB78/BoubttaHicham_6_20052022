@@ -13,7 +13,6 @@ exports.showAllSauce = (req, res, next) => {
 
 //affichage d'une seul sauce
 exports.showOneSauce = (req, res, next) => {
-    console.log("requete params show one sauce", req.params.id)
     //on compare l'_id du produit à celui du parametre de requete 
     sauce.findOne({ _id: req.params.id })
      .then((response) => {
@@ -70,17 +69,18 @@ exports.updateSauce = (req, res, next) => {
         //req.file => sa veut dire si il y a un fichier dans la requete
         //si l'utilisateur modifie la photo on va recevoir en form data donc il faur parser le tout
         sauce.findOne({ _id: req.params.id })
-         .then(reqContain => {
-            console.log(reqContain)
+         .then(resContain => {
+            console.log("--->>> la reponse pour voir la photo", resContain)
             //pk on le récupère dans la requete ?
-            const fileNameOfReq = reqContain.imageUrl.split('/images/')[1];
+            const fileNameOfReq = resContain.imageUrl.split('/images/')[1];
+            console.log(fileNameOfReq)
             fs.unlink(`images/${fileNameOfReq}`, () => {
                 //on update tout en recréant une nouvelle sauce avec les nouveaux élements
                 const updateSauce = {
-                    ...JSON.parse(req.body.reqContain),
+                    ...JSON.parse(req.body.sauce),
                     imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
                 }
-                sauce.updateOne({ _id: req.params.id }, { updateSauce, _id: req.params.id })
+                sauce.updateOne({ _id: req.params.id }, { ...updateSauce, _id: req.params.id })
                  .then(() => res.status(200).json({ message: "sauce mise à jour" }))
                  .catch(error => res.status(400).json({ error }));
             })
@@ -99,3 +99,14 @@ exports.updateSauce = (req, res, next) => {
 //req.params c'est pour trouver l'objet dans la base de donnée ?
 
 //gestion des likes
+exports.dislikeandlike = (req, res, next) => {
+    sauce.findOne({_id : req.params.id})
+    .then((res) => {
+       console.log("----> la response du body", res)
+       // si l'utilisateur n'a pas liker et que le like est a 0
+       console.log("****> req.body", req.body)
+    })
+    .catch((error) => {
+        res.status(400).json({ error });
+    })
+};
