@@ -2,9 +2,15 @@
 const express = require('express');
 const app = express();
 
+//importation de helmet pour proteger les headers
+const helmet = require("helmet");
+
 //le req et le res fonctionne avec le paquet body parser sa ressemble a la methode JSON.parse
 //cela permet d'interpreter du JSON
 const bodyParser = require("body-parser");
+
+//importation de morgan pour logger les requete http
+const morgan = require('morgan');
 
 //on importe mongoose dans le fichier principal index.js depuis le dossier models et dbConfig.js
 //si on importe pas une paquet dans le fichier principal il ne fonctionnera pas
@@ -23,6 +29,10 @@ const saucesRoutes = require("./routes/posts");
 let port = process.env.PORT || 3000;
 
 /**********************/
+
+//utilisation de helmet pour protéger les headers
+app.use(helmet());
+
 //gestion des erreurs cors
 app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
@@ -40,6 +50,9 @@ app.use("/images", express.static(path.join(__dirname, 'images')));
 //cela permet d'interpreter du JSON
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true })); // to support URL-encoded bodies
+
+//utilisation de morgan
+app.use(morgan('dev'));
 
 //on utilise les routes users pour login et signup
 app.use("/api/auth", userRoutes);

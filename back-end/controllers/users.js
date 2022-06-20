@@ -8,18 +8,26 @@ console.log("-->test sur la page user route", process.env.KEY)
 //ici on importe bcrypt
 const bcrypt = require("bcrypt");
 
+//importation de cryptoJS pour crypter les mails dans la BDD
+const cryptoJS = require("crypto-js");
+
 //ici on importe les modeles dans lesquelles on injectera les données
 const user = require("../models/users");
 
 //ici on va importer plus tard le jwt
 const jwt = require("jsonwebtoken");
+
 // le code pour l'inscription
 exports.signup = (req, res, next) => {
-    console.log("test de l'enregistrement du user");
     //ici on crypte le mot de passe que l'utilisateur envoie depuis le front
     //on exécute le hashage 10 fois (pdt 10 tours)
     console.log("email du user", req.body.email);
     console.log("pwd du user", req.body.password);
+
+    //la constante qui crypte le mail dans la BDD
+    const emailCrypted = cryptoJS.HmacSHA256(req.body.email, "keyy").toString();
+    console.log("----> email crypté", emailCrypted);
+    
     const users = new user({
         email: req.body.email,
         password: req.body.password
