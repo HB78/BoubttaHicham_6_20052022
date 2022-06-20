@@ -26,7 +26,7 @@ router.post("/", multer, crud.createSauce);
 router.delete("/:id", crud.deleteSauce);
 
 //route pour mettre à jour une sauce
-router.put("/:id", multer, crud.updateSauce)
+router.put("/:id", auth, multer, crud.updateSauce)
 
 //routes pour les likes et dislikes
 router.post("/:id/like", crud.dislikeandlike)
