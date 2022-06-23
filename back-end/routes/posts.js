@@ -23,7 +23,7 @@ router.get("/", auth, crud.showAllSauce);
 router.post("/", multer, crud.createSauce);
 
 //routes pour supprimer une sauce
-router.delete("/:id", crud.deleteSauce);
+router.delete("/:id", auth, crud.deleteSauce);
 
 //route pour mettre à jour une sauce
 router.put("/:id", auth, multer, crud.updateSauce)

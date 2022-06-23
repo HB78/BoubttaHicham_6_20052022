@@ -8,14 +8,14 @@ console.log("-->test sur la page user route", process.env.KEY)
 //ici on importe bcrypt
 const bcrypt = require("bcrypt");
 
-//importation de cryptoJS pour crypter les mails dans la BDD
-const cryptoJS = require("crypto-js");
-
 //ici on importe les modeles dans lesquelles on injectera les données
 const user = require("../models/users");
 
 //ici on va importer plus tard le jwt
 const jwt = require("jsonwebtoken");
+
+//ici on importe crypto-js pour chiffrer le mail dans la BDD
+const cryptoJS = require("crypto-js");
 
 // le code pour l'inscription
 exports.signup = (req, res, next) => {
@@ -23,11 +23,6 @@ exports.signup = (req, res, next) => {
     //on exécute le hashage 10 fois (pdt 10 tours)
     console.log("email du user", req.body.email);
     console.log("pwd du user", req.body.password);
-
-    //la constante qui crypte le mail dans la BDD
-    const emailCrypted = cryptoJS.HmacSHA256(req.body.email, "keyy").toString();
-    console.log("----> email crypté", emailCrypted);
-    
     const users = new user({
         email: req.body.email,
         password: req.body.password
@@ -61,7 +56,7 @@ exports.signup = (req, res, next) => {
               }
               console.log("connexion reussie")
               console.log(req.body);
-              const token = jwt.sign({userId : user._id }, process.env.KEY, {expiresIn: "7d"});
+              const token = jwt.sign({userId : user._id }, process.env.KEY, {expiresIn: "77d"});
               console.log("Nouveau token de connction générer :>", token);
               const objResponse = {
                 userId : user._id,
@@ -73,3 +68,4 @@ exports.signup = (req, res, next) => {
      })
      .catch(error => res.status(500).json({ error }))
  };
+ //const emailCrypted = cryptoJS.HmacSHA256(req.body.email, process.env.CRYPTEMAIL).toString;

@@ -31,7 +31,8 @@ let port = process.env.PORT || 3000;
 /**********************/
 
 //utilisation de helmet pour protéger les headers
-app.use(helmet());
+//l'option de helmet permet de regler les pbl d'affichage des images
+app.use(helmet({crossOriginResourcePolicy: false}));
 
 //gestion des erreurs cors
 app.use((req, res, next) => {
