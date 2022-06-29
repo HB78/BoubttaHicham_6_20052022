@@ -126,7 +126,7 @@ exports.dislikeandlike = (req, res, next) => {
         .catch(error => res.status(400).json({ error }));
         break;
         
-        //pour annuler le like et le dislike
+        //pour annuler le like ou le dislike
         case 0 :
         sauce.findOne({ _id: req.params.id })
         .then((obj) => {
@@ -160,3 +160,54 @@ exports.dislikeandlike = (req, res, next) => {
         console.log(' le problème se situe au niveau du switch')
   }
 };
+// sauce.findOne({_id : req.params.id})
+//     .then((objet) => {
+//         console.log("----> l'objet et son contenu", objet)
+//        // si l'utilisateur n'a pas liker
+//         console.log("****> req.body", req.body)
+//         if(!objet.likes == req.body.likes) {
+//             sauce.updateOne({ _id: req.params.id }, 
+//                 {
+//                     $inc:{likes : 1},
+//                     $push: {usersLiked: req.body.userId}
+//                 }
+//             )
+//                 .then(() => res.status(200).json({ message: 'like ajouté' }))
+//                 .catch(error => res.status(400).json({ error }));
+//         }
+//         else {
+//             //si le user a déjà liker
+//             sauce.updateOne({ _id: req.params.id }, 
+//                 {
+//                     $inc:{likes : 0},
+//                     $pull: {usersLiked: req.body.userId}
+//                 }
+//             )
+//             .then(() => res.status(200).json({ message: 'like retiré' }))
+//             .catch(error => res.status(400).json({ error }));
+//             }
+//             //ici on va gérer les dislikes
+//             if(!objet.usersDisliked.includes(req.body.userId)) {
+//             sauce.updateOne({ _id: req.params.id }, 
+//                 {
+//                     $inc:{dislikes : 1},
+//                     $push: {usersDisliked: req.body.userId}
+//                 }
+//             )
+//             .then(() => res.status(200).json({ message: 'like ajouté' }))
+//             .catch(error => res.status(400).json({ error }));
+//             }else {
+//             //si le user a déjà disliker
+//             sauce.updateOne({ _id: req.params.id }, 
+//                 {
+//                     $inc:{dislikes : 0},
+//                     $pull: {usersDisliked: req.body.userId}
+//                 }
+//             )
+//             .then(() => res.status(200).json({ message: 'like retiré' }))
+//             .catch(error => res.status(400).json({ error }));
+//             }
+//     })
+//     .catch((error) => {
+//         res.status(400).json({ error });
+//     })
